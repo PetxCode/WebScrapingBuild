@@ -163,7 +163,13 @@ app.use(express.json());
 // ;
 // paparScriptII();
 
-const ourBrowser = async () => {
+async function ourBrowser(
+  article: string
+  //   title: string,
+  //   image: string,
+  //   rating: string,
+  //   url: string
+) {
   const browser = await puppeteer.launch({ headless: false });
   try {
     const page = await browser.newPage();
@@ -185,7 +191,7 @@ const ourBrowser = async () => {
         return parseFloat(data);
       };
 
-      const data = Array.from(document.querySelectorAll("article"));
+      const data = Array.from(document.querySelectorAll(article));
       return data.map((props) => ({
         title: props.querySelector("h3")?.textContent,
         img: props.querySelector("img")?.getAttribute("src"),
@@ -197,15 +203,22 @@ const ourBrowser = async () => {
     }, URL);
 
     console.log(data);
+    console.log("Article: ", article);
   } catch (error) {
     console.log(error);
   } finally {
     console.log("done");
     await browser.close();
   }
-};
+}
 
-ourBrowser();
+ourBrowser(
+  "article"
+  //  "h3",
+  //  "img",
+  //  "a",
+  //  "a"
+);
 app.get("/", (req: Request, res: Response) => {
   try {
     return res.status(200).json({
